@@ -23,42 +23,10 @@ final class Paginateur implements PaginateurInterface {
 
     public function paginer ()
     {
-        $I_nbEnregistrements = $this->_O_listeur->recupererNbEnregistrements();
-
-        $I_nbPages = ceil($I_nbEnregistrements / $this->_I_limite);
-
-        $S_controleurCible = $this->_O_listeur->recupererCible();
-    
-        $A_pagination = null;
-
-        if ($I_nbPages > 1)
-        {
-            for ($i=1; $i <= $I_nbPages; $i++)
-            {
-                $A_pagination[$i] = null;
-
-                if ($this->_I_pageCourante != $i)
-                {
-                    $A_pagination[$i] = $S_controleurCible . '/paginer/' . $i;
-                }
-            }
-        }
-
-        return $A_pagination;
     }
 
     public function recupererPage ($I_numeroPage)
     {
-        if ($I_numeroPage <= 0)
-        {
-            throw new InvalidArgumentException('Le numéro de page ' . $I_numeroPage . ' est invalide');
-        }
-
-        $this->_I_pageCourante = $I_numeroPage;
-
-        $I_indexDebut = $I_numeroPage == 1 ? 0 : (($I_numeroPage - 1) * $this->_I_limite);
-
-        return $this->_O_listeur->lister($I_indexDebut, $this->_I_limite);
     }
 
 }
