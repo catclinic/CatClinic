@@ -24,12 +24,17 @@ if (count($A_vue['utilisateurs']))
 
         $O_utilisateurCourant = BoiteAOutils::recupererDepuisSession('utilisateur');
 
-        if ($O_utilisateur->donneLogin() != $O_utilisateurCourant->donneLogin()) {
-            // On ne peut pas s'auto-supprimer ni même se modifier alors qu'on est connecté !
-            print '<td><a href="/utilisateur/suppr/' . $O_utilisateur->donneIdentifiant() .
-                '" onclick="return(confirm(\'Etes-vous sûr de vouloir supprimer cet utilisateur ?\'));">
-                Effacer</a></td>';
-            echo '<td><a href="/utilisateur/edit/' . $O_utilisateur->donneIdentifiant() . '">Modifier</a></td>';
+        if ($O_utilisateurCourant) {
+            if ($O_utilisateur->donneLogin() != $O_utilisateurCourant->donneLogin()) {
+                // On ne peut pas s'auto-supprimer ni même se modifier alors qu'on est connecté !
+                print '<td><a href="/utilisateur/suppr/' . $O_utilisateur->donneIdentifiant() .
+                    '" onclick="return(confirm(\'Etes-vous sûr de vouloir supprimer cet utilisateur ?\'));">
+                    Effacer</a></td>';
+                echo '<td><a href="/utilisateur/edit/' . $O_utilisateur->donneIdentifiant() . '">Modifier</a></td>';
+            }
+        } else {
+            // Pas d'utilisateur courant en session, c'est qu'elle a expirée, on renvoie à l'accueil
+            BoiteAOutils::redirigerVers('login');
         }
 
         echo '</tr>';
