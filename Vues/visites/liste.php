@@ -45,9 +45,9 @@ if (count($A_vue['visites']))
     {
         echo '<tbody>';
         print '<tr>';
-        echo '<td>'. date("d/m/Y", strtotime($O_visite->donneDate()))     . '</td><td>' . 
-                        $O_visite->donnePrix()  . '&nbsp;&euro;</td><td>' .
-                        $O_visite->donneObservations()      . '</td>';
+        echo '<td>'. date("d/m/Y", strtotime($O_visite[0]->donneDate()))     . '</td><td>' . 
+                        $O_visite[0]->donnePrix()  . '&nbsp;&euro;</td><td>' .
+                        $O_visite[0]->donneObservations()      . '</td>';
         echo '</tr>';
         echo '</tbody>';
     }

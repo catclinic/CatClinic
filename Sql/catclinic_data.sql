@@ -19,4 +19,5 @@ insert into utilisateur(login, motdepasse, id_proprietaire) values ('invite', SH
 insert into utilisateur(login, motdepasse, admin) values ('admincat', SHA1('admincat123cat5'), 1);
 
 insert into visite(id_praticien, id_chat, date, prix, observations) values (1,1,current_timestamp(), 79.90, 'Opération bien déroulée');
+insert into visite(id_praticien, id_chat, date, prix, observations) values (2,2,current_timestamp(), 79.90, 'Opération bien déroulée');
 insert into visite(id_praticien, id_chat, date, prix, observations) values (2,3,current_timestamp(), 79.90, 'Opération bien déroulée');
