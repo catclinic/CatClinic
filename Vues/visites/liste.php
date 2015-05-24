@@ -10,18 +10,20 @@
 </thead>
 <?php
 
-if (count($A_vue['chat']))
+if (count($A_vue['chats']))
 {
-    $O_chat = $A_vue['chat'];
+    $A_chats = $A_vue['chats'];
+
     echo '<h2>Vos chats</h2>';
     echo '<tbody>';
-    print '<tr>';
-    echo '<td>' .
-                    $O_chat->donneNom() . '</td><td>' .
-                    $O_chat->donneTatouage() . '</td><td>' .
-                    $O_chat->donneAge()      . '</td>';
-    echo '</tr>';
-
+    foreach ($A_chats as $O_chat) {
+        print '<tr>';
+        echo '<td>' .
+                        $O_chat->donneNom() . '</td><td>' .
+                        $O_chat->donneTatouage() . '</td><td>' .
+                        $O_chat->donneAge()      . '</td>';
+        echo '</tr>';
+    }
     echo '</tbody>';
 }
 ?>

@@ -26,7 +26,7 @@ final class ControleurDefaut
                         $I_identifiantChat = $O_chat->donneIdentifiant();
                         $A_visites[] = $O_visiteMapper->trouverParIdentifiantChat ($I_identifiantChat);
                     }
-                    Vue::montrer('visites/liste', array('visites' => $A_visites, 'chat' => $O_chat));
+                    Vue::montrer('visites/liste', array('visites' => $A_visites, 'chats' => $A_chats));
                 } else
                 {
                     Vue::montrer('client/accueil');
