@@ -9,6 +9,11 @@ final class ControleurUtilisateur
         $this->paginerAction();
     }
 
+    private function estAdministrateur() {
+        $O_utilisateur = BoiteAOutils::recupererDepuisSession('utilisateur');
+        return $O_utilisateur->estAdministrateur ();
+    }
+
     public function editAction(Array $A_parametres)
     {
         $I_identifiantUtilisateur = $A_parametres[0];
@@ -20,6 +25,15 @@ final class ControleurUtilisateur
             BoiteAOutils::redirigerVers('');
         } else
         {
+            // vérification des droits d'admin pour la modif
+            $O_utilisateur = BoiteAOutils::recupererDepuisSession('utilisateur');
+
+            if (!$O_utilisateur->estAdministrateur ()) {
+                BoiteAOutils::stockerErreur("Vous n'avez pas les droits pour modifier les utilisateurs");
+                // on renvoit vers l'action par défaut, en l'occurrence, la liste des utilisateurs
+                BoiteAOutils::redirigerVers('');
+            }
+
             // l'identifiant donné correspond t-il à une entrée en base ?
 
             try {

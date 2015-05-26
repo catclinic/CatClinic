@@ -1,4 +1,8 @@
 <h1>Vos visites</h1>
+<?php
+    // si une erreur s'est produite, elle remonte ici
+    Vue::montrer('standard/erreurs');
+?>
 <table>
 <caption>Voici la liste de vos chats</caption>
 <thead>
