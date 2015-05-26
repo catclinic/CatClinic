@@ -1,4 +1,8 @@
 <h1>Utilisateurs</h1>
+<?php
+    // si une erreur s'est produite, elle remonte ici
+    Vue::montrer('standard/erreurs');
+?>
 <table>
 <caption>Liste des utilisateurs actifs du site</caption>
 <thead>
@@ -36,7 +40,6 @@ if (count($A_vue['utilisateurs']))
             // Pas d'utilisateur courant en session, c'est qu'elle a expirée, on renvoie à l'accueil
             BoiteAOutils::redirigerVers('login');
         }
-
         echo '</tr>';
     }
 

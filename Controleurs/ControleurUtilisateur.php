@@ -9,11 +9,6 @@ final class ControleurUtilisateur
         $this->paginerAction();
     }
 
-    private function estAdministrateur() {
-        $O_utilisateur = BoiteAOutils::recupererDepuisSession('utilisateur');
-        return $O_utilisateur->estAdministrateur ();
-    }
-
     public function editAction(Array $A_parametres)
     {
         $I_identifiantUtilisateur = $A_parametres[0];
