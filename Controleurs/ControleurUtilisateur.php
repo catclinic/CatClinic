@@ -4,8 +4,20 @@
 
 final class ControleurUtilisateur
 {
+    private function _estUnAdministrateur() {
+        $O_utilisateur = BoiteAOutils::recupererDepuisSession('utilisateur');
+
+        if (!$O_utilisateur->estAdministrateur ()) {
+            BoiteAOutils::stockerErreur("Vous n'avez pas les droits pour effectuer cette opération sur le contrôleur Utilisateur");
+            // on renvoit vers l'action par défaut, en l'occurrence, la liste des utilisateurs
+            BoiteAOutils::redirigerVers('');
+        }
+    }
+
     public function listeAction()
     {
+        // vérification des droits d'admin pour le listing qui donne accès à la modification
+        $this->_estUnAdministrateur();
         $this->paginerAction();
     }
 
@@ -21,13 +33,7 @@ final class ControleurUtilisateur
         } else
         {
             // vérification des droits d'admin pour la modif
-            $O_utilisateur = BoiteAOutils::recupererDepuisSession('utilisateur');
-
-            if (!$O_utilisateur->estAdministrateur ()) {
-                BoiteAOutils::stockerErreur("Vous n'avez pas les droits pour modifier les utilisateurs");
-                // on renvoit vers l'action par défaut, en l'occurrence, la liste des utilisateurs
-                BoiteAOutils::redirigerVers('');
-            }
+            $this->_estUnAdministrateur();
 
             // l'identifiant donné correspond t-il à une entrée en base ?
 
@@ -48,6 +54,9 @@ final class ControleurUtilisateur
 
     public function miseajourAction(Array $A_parametres)
     {
+        // vérification des droits d'admin pour la modif
+        $this->_estUnAdministrateur();
+
         $I_identifiantUtilisateur = $A_parametres[0];
         $S_login = $_POST['login'];
         // TODO: vérifications sur l'input, même si PDO nettoie derrière
@@ -65,6 +74,9 @@ final class ControleurUtilisateur
 
     public function supprAction(Array $A_parametres)
     {
+        // vérification des droits d'admin pour la modif
+        $this->_estUnAdministrateur();
+
         $I_identifiantUtilisateur = $A_parametres[0];
 
         $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur', Connexion::recupererInstance());
@@ -104,6 +116,9 @@ final class ControleurUtilisateur
 
     public function paginerAction(Array $A_parametres = null)
     {
+        // vérification des droits d'admin pour la modif
+        $this->_estUnAdministrateur();
+
         $I_page = isset($A_parametres[0]) ? $A_parametres[0] : 1;
         $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur', Connexion::recupererInstance());
 
