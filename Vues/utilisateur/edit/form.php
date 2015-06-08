@@ -2,6 +2,13 @@
     $O_utilisateur = $A_vue['utilisateur'];
 ?>
 <h1>Editer l'utilisateur "<?php echo $O_utilisateur->donneLogin(); ?>"</h1>
+<?php
+    // si une erreur s'est produite, elle remonte ici
+    Vue::montrer('standard/erreurs');
+    // une fois l'erreur affichée, il faut penser à la supprimer pour qu'elle ne
+    // persiste pas inutilement
+    BoiteAOutils::supprimerErreur();
+?>
 <form name="utilisateur"
       id="utilisateur"
       method="post"

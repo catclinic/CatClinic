@@ -2,6 +2,9 @@
 <?php
     // si une erreur s'est produite, elle remonte ici
     Vue::montrer('standard/erreurs');
+    // une fois l'erreur affichée, il faut penser à la supprimer pour qu'elle ne
+    // persiste pas inutilement
+    BoiteAOutils::supprimerErreur();
 ?>
 <table>
 <caption>Liste des utilisateurs actifs du site</caption>

@@ -43,6 +43,11 @@ final class BoiteAOutils
     {
         self::rangerDansSession('erreur', $S_erreur);
     }
+
+    public static function supprimerErreur()
+    {
+        self::rangerDansSession('erreur', null);
+    }
     
     public static function redirigerVers ($S_url)
     {

@@ -66,7 +66,12 @@ final class ControleurUtilisateur
 
         if ($S_login != $O_utilisateur->donneLogin()) {
             $O_utilisateur->changeLogin($S_login);
-            $O_utilisateurMapper->actualiser($O_utilisateur);
+            try {
+                $O_utilisateurMapper->actualiser($O_utilisateur);
+            } catch (Exception $O_exception) {
+                BoiteAOutils::stockerErreur($O_exception->getMessage());
+                BoiteAOutils::redirigerVers('utilisateur/edit/' . $I_identifiantUtilisateur);
+            }
         }
         // on redirige vers la liste !
         BoiteAOutils::redirigerVers('utilisateur/paginer');
