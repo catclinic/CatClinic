@@ -4,7 +4,7 @@ final class FabriqueDeMappers implements FabriqueDeMappersInterface
 {
     public static function fabriquer ($S_nom, Connexion $O_connexion, $S_type = 'Sql') {
         $S_classeCible = ucfirst(strtolower($S_nom)) . 'Mapper';
-        $S_repertoireCible = ucfirst(strtolower($S_type));
+        $S_repertoireCible = Constantes::repertoireMappers() .  ucfirst(strtolower($S_type));
 
         if (is_dir($S_repertoireCible)) {
             if (class_exists($S_classeCible)) {
