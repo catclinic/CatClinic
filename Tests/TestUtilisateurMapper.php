@@ -1,4 +1,6 @@
 <?php
+// TODO
+// tests unitaires...à compléter !!!
 
 require '../Noyau/ChargementAuto.php';
 
