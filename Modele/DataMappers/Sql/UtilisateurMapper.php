@@ -10,34 +10,7 @@ class UtilisateurMapper extends SqlDataMapper
     }
 
     public function trouverParIntervalle ($I_debut, $I_fin) {
-        $S_requete = 'SELECT id, login, admin FROM ' . $this->_S_nomTable;
-
-        if (!is_null($I_debut) && !is_null($I_fin))
-        {
-            $S_requete .= ' LIMIT ?, ?';
-        }
-
-        $A_paramsRequete = array(array($I_debut, Connexion::PARAM_ENTIER), array($I_fin, Connexion::PARAM_ENTIER));
-
-        $A_utilisateurs = array ();
-
-        foreach ($this->_O_connexion->projeter($S_requete, $A_paramsRequete) as $O_utilisateurEnBase)
-        {
-            // $O_utilisateurEnBase est un objet de la classe prédéfinie StdClass
-
-            $O_utilisateur = new Utilisateur ();
-
-            // Je convertis mon objet StdClass trop "vague" en objet métier Utilisateur !
-            $O_utilisateur->changeIdentifiant($O_utilisateurEnBase->id);
-            $O_utilisateur->changeLogin ($O_utilisateurEnBase->login);
-            $O_utilisateur->changeAdmin ($O_utilisateurEnBase->admin);
-
-            // A ce stade j'ai réalisé en quelque sorte une copie de mon objet StdClass en un objet métier de mon application
-            $A_utilisateurs[] = $O_utilisateur;
-        }
-
-        // J'ai (si des enregistrements existent, évidemment) crée un tableau d'objets Utilisateur...je le renvoie !
-        return $A_utilisateurs;
+        ;
     }
 
     public function trouverParIdentifiant ($I_identifiant)
@@ -165,29 +138,13 @@ class UtilisateurMapper extends SqlDataMapper
 
     public function creer (Utilisateur $O_utilisateur)
     {
-        if (!$O_utilisateur->donneLogin())
-        {
-            throw new Exception ("Impossible de créer l'utilisateur, des informations sont manquantes");
-        }
-
-        $S_login = $O_utilisateur->donneLogin();
-        $S_motDePasse = $O_utilisateur->donneMotDePasse();
-        $B_estAdmin = $O_utilisateur->estAdministrateur();
-        $I_idProprietaire = null;
-
-        if ($O_utilisateur->estProprietaire()) {
-            $I_idProprietaire = $O_utilisateur->donneProprietaire()->donneIdentifiant();
-        }
-
-        $S_requete = "INSERT INTO " . $this->_S_nomTable . " (login, motdepasse, admin, id_proprietaire) VALUES (?, ?, ?, ?)";
-        $A_paramsRequete = array($S_login, $S_motDePasse, $B_estAdmin, $I_idProprietaire);
-
-        // j'insère en table et inserer me renvoie l'identifiant de mon nouvel enregistrement...je le stocke
+        /* A FAIRE
         try {
             $O_utilisateur->changeIdentifiant($this->_O_connexion->inserer($S_requete, $A_paramsRequete));
         } catch (BaseDeDonneesDoublonException $O_exception) {
             // On propage l'exception en la faisant "remonter" (bubble up)
             throw new SQLDataMapperException("Doublon détecté : " . $O_exception->getMessage());
         }
+        */
     }
 }
