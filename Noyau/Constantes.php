@@ -24,8 +24,14 @@ final class Constantes
 
     const REPERTOIRE_TEST = '/Tests/';
 
+    const REPERTOIRE_ERREURS_BDD = '/Configuration/bdd/erreurs/';
+
     public static function repertoireRacine() {
         return realpath(__DIR__ . '/../');
+    }
+
+    public static function repertoireErreursBaseDeDonnees() {
+        return self::repertoireRacine() . self::REPERTOIRE_NOYAU . self::REPERTOIRE_ERREURS_BDD;
     }
 
     public static function repertoireTests() {

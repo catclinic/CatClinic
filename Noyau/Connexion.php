@@ -7,7 +7,9 @@ class Connexion
 {
     private static $_O_instance;
 
-    protected $_O_connexion; // C'est là que réside ma connexion PDO
+    private $_O_connexion; // C'est là que réside ma connexion PDO
+
+    private $_A_erreurs;
 
     const PARAM_ENTIER = PDO::PARAM_INT;
 
@@ -24,6 +26,15 @@ class Connexion
         if ($A_params[$S_environnement]) {
             // j'écrase le tableau complet avec celui qui m'interesse
             $A_params = $A_params[$S_environnement];
+
+            $S_fichierErreurs = Constantes::repertoireErreursBaseDeDonnees() . $A_params['cible'] . '.ini';
+
+            if (!file_exists($S_fichierErreurs))  {
+                throw new BaseDeDonneesException('Connexion impossible : le fichier des erreurs est absent'.$S_fichierErreurs);
+            }
+
+            $this->_A_erreurs = parse_ini_file($S_fichierErreurs, true);
+
             // j'exige qu'on me donne de l'UTF8 (regardez le dernier paramètre du constructeur PDO)
             $this->_O_connexion = new PDO($A_params['cible'] . ':host=' . $A_params['serveur'] . 
                         ';dbname=' . $A_params['basededonnees'],
@@ -61,7 +72,20 @@ class Connexion
     {
         $O_pdoStatement = $this->_O_connexion->prepare($S_requete);
         $this->_lierParametres($O_pdoStatement, $A_params);
-        $O_pdoStatement->execute();
+        try {
+            $O_pdoStatement->execute();
+        } catch (PDOException $O_exception) {
+            $A_erreurs = $O_pdoStatement->errorInfo();
+            if ($this->_donneErreur('doublon') == $A_erreurs[1]) {
+                // Tentative d'insertion d'un doublon
+                preg_match_all("/'([^']+)'/", $O_exception->getMessage(), $A_resultat);
+
+                $S_doublon_valeur = $A_resultat[1][0];
+                $S_doublon_champ = $A_resultat[1][1];
+
+                throw new BaseDeDonneesDoublonException("'$S_doublon_valeur' existe déjà dans le champ '$S_doublon_champ'");
+            }
+        }
         return $this->_O_connexion->lastInsertId();
     }
 
@@ -114,5 +138,9 @@ class Connexion
                 }
             }
         }
+    }
+
+    private function _donneErreur($S_erreur) {
+        return array_key_exists(strtolower($S_erreur), $this->_A_erreurs) ? $this->_A_erreurs[strtolower($S_erreur)] : null;
     }
 }

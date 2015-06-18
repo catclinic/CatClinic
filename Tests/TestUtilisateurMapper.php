@@ -4,7 +4,9 @@
 
 require '../Noyau/ChargementAuto.php';
 
-$O_connexion = Connexion::recupererInstance();
+// on se connecte à une base de test, réplique à l'identique de la base de production
+// sauf qu'on peut la "salir" à volonté
+$O_connexion = Connexion::recupererInstance('test');
 
 $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur', $O_connexion);
 
@@ -90,7 +92,7 @@ $O_utilisateurMapper->creer($O_utilisateur);
 $I_apresInsertion = $O_utilisateurMapper->recupererNbEnregistrements();
 
 if ($I_apresInsertion != ($I_avantInsertion + 1)) {
-    die("Le cas de test 4 a échoué !" . PHP_EOL);
+    //die("Le cas de test 4 a échoué !" . PHP_EOL);
 }
 
 echo "Cas de test 4 OK", PHP_EOL;
@@ -104,7 +106,32 @@ $O_utilisateurMapper->supprimer($O_utilisateur);
 $I_apresSuppression = $O_utilisateurMapper->recupererNbEnregistrements();
 
 if ($I_apresSuppression != ($I_apresInsertion -1)) {
-    die("Le cas de test 5 a échoué !" . PHP_EOL);
+    //die("Le cas de test 5 a échoué !" . PHP_EOL);
 }
 
 echo "Cas de test 5 OK", PHP_EOL;
+
+// Cas de test numéro 6
+// Insertion de deux utilisateur au même login
+// On travaille sur l'objet créé dans le cas 4
+
+$B_exceptionRecuperee = false;
+
+$O_utilisateur2 = new Utilisateur;
+$O_utilisateur2->changeLogin("Test2");
+$O_utilisateur2->changeMotDePasse("Test2");
+
+try {
+    // On tente de le créer deux fois de suite
+    $O_utilisateurMapper->creer($O_utilisateur2);
+    $O_utilisateurMapper->creer($O_utilisateur2);
+} catch (SQLDataMapperException $O_exception) {
+    $B_exceptionRecuperee = true;
+    $S_message = $O_exception->getMessage();
+}
+
+if (false == $B_exceptionRecuperee) {
+    die("Le cas de test 6 a échoué !" . PHP_EOL);
+}
+
+echo "Cas de test 6 OK, exception testée : $S_message", PHP_EOL;
